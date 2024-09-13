@@ -3,8 +3,9 @@ import {EditText, IconButton, Typography, useDooboo} from 'dooboo-ui';
 import {Stack} from 'expo-router';
 
 import {t} from '../src/STRINGS';
-import {KeyboardAvoidingView, View} from 'react-native';
+import {KeyboardAvoidingView, Platform, View} from 'react-native';
 import {useState} from 'react';
+import { useKeyboardAnimation } from '../src/hooks/useKeyboardAnimation';
 
 const Container = styled.View`
   background-color: ${({theme}) => theme.bg.basic};
@@ -19,6 +20,8 @@ export default function Index(): JSX.Element {
   const {theme} = useDooboo();
   const [text, setText] = useState('');
 
+  useKeyboardAnimation();
+
   return (
     <Container>
       <Stack.Screen
@@ -31,9 +34,7 @@ export default function Index(): JSX.Element {
           flex: 1;
           width: 100%;
         `}
-        // Handle side-effect after installing react-native-keyboard-controller
-        keyboardVerticalOffset={88}
-        behavior='padding'
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
         <View
           style={css`
