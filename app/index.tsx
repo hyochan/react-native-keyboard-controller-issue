@@ -3,7 +3,7 @@ import {EditText, IconButton, Typography, useDooboo} from 'dooboo-ui';
 import {Stack} from 'expo-router';
 
 import {t} from '../src/STRINGS';
-import {KeyboardAvoidingView, Platform, View} from 'react-native';
+import {KeyboardAvoidingView, View} from 'react-native';
 import {useState} from 'react';
 
 const Container = styled.View`
@@ -31,7 +31,9 @@ export default function Index(): JSX.Element {
           flex: 1;
           width: 100%;
         `}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        // Handle side-effect after installing react-native-keyboard-controller
+        keyboardVerticalOffset={88}
+        behavior='padding'
       >
         <View
           style={css`
