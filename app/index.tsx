@@ -3,11 +3,12 @@ import {EditText, IconButton, Typography, useDooboo} from 'dooboo-ui';
 import {Stack} from 'expo-router';
 
 import {t} from '../src/STRINGS';
-import {View} from 'react-native';
-import {useState} from 'react';
+import {Pressable, View} from 'react-native';
+import {ElementRef, useRef, useState} from 'react';
 import {KeyboardAvoidingView} from 'react-native-keyboard-controller';
+import {useHeaderHeight} from '@react-navigation/elements';
 
-const Container = styled.View`
+const Container = styled.SafeAreaView`
   background-color: ${({theme}) => theme.bg.basic};
 
   flex: 1;
@@ -19,6 +20,8 @@ const Container = styled.View`
 export default function Index(): JSX.Element {
   const {theme} = useDooboo();
   const [text, setText] = useState('');
+  const ref = useRef<ElementRef<typeof EditText>>(null);
+  const headerHeight = useHeaderHeight();
 
   return (
     <Container>
@@ -28,24 +31,33 @@ export default function Index(): JSX.Element {
         }}
       />
       <KeyboardAvoidingView
+        keyboardVerticalOffset={headerHeight}
         style={css`
           flex: 1;
           width: 100%;
         `}
         behavior="padding"
       >
-        <View
+        <Pressable
+          onPress={() => ref?.current?.blur()}
           style={css`
             flex: 1;
-            background-color: ${theme.bg.paper};
-
-            justify-content: center;
-            align-items: center;
           `}
         >
-          <Typography.Heading5>Hi there!</Typography.Heading5>
-        </View>
+          <View
+            style={css`
+              flex: 1;
+              background-color: ${theme.bg.paper};
+
+              justify-content: center;
+              align-items: center;
+            `}
+          >
+            <Typography.Heading5>Hi there!</Typography.Heading5>
+          </View>
+        </Pressable>
         <EditText
+          ref={ref}
           onChangeText={setText}
           value={text}
           decoration="boxed"
